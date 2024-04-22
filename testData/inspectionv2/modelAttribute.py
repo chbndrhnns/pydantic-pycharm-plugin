@@ -1,8 +1,8 @@
+from typing import Optional
 from typing import ClassVar
 import dataclasses
 
-from pydantic import BaseModel
-
+from pydantic import BaseModel, Field
 
 class B(BaseModel):
     class Inner(BaseModel):
@@ -38,3 +38,10 @@ print(C.TEST)
 C.Inner
 C.model_fields
 c.model_fields
+
+# https://github.com/koxudaxi/pydantic-pycharm-plugin/issues/927
+class D(B):
+    inner: Optional[B.Inner] = None
+
+d = D(inner=B.Inner(user="user"))
+d.inner.<warning descr="Unresolved attribute reference 'other' for class 'Inner'">other</warning>
